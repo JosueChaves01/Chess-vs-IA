@@ -1,6 +1,8 @@
 # Chess React App with Stockfish AI
 
-Este proyecto es un juego de ajedrez interactivo desarrollado en React, que permite jugar contra otro humano o contra una IA fuerte (Stockfish) ejecutada como Web Worker en el navegador.
+**Descripción:**
+
+Este proyecto es una aplicación web de ajedrez desarrollada en React que permite jugar partidas tanto contra otro jugador humano como contra una inteligencia artificial de alto nivel (Stockfish), ejecutada completamente en el navegador mediante un Web Worker. La aplicación ofrece una experiencia de usuario moderna, con animaciones, historial de movimientos, cronómetro, detección automática de jaque mate, ahogado y tablas por material insuficiente, así como opciones de promoción y rendición. No requiere backend: todo el procesamiento, incluida la IA, ocurre en el cliente.
 
 ## Características principales
 

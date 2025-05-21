@@ -146,10 +146,13 @@ function isValidMove(board, from, to, turn, kingMoved, rookMoved, enPassant, ign
       const row = from.row;
       // Corto
       if (dc === 2 && !kingMoved[turn] && !rookMoved[turn][1]) {
+        // Verifica que el rey y la torre no se hayan movido
         if (
           board[row][5] === null &&
           board[row][6] === null &&
-          board[row][7] && board[row][7][1] === 'r'
+          board[row][7] && board[row][7][1] === 'r' &&
+          !kingMoved[turn] &&
+          !rookMoved[turn][1]
         ) {
           return true;
         }
@@ -160,7 +163,9 @@ function isValidMove(board, from, to, turn, kingMoved, rookMoved, enPassant, ign
           board[row][1] === null &&
           board[row][2] === null &&
           board[row][3] === null &&
-          board[row][0] && board[row][0][1] === 'r'
+          board[row][0] && board[row][0][1] === 'r' &&
+          !kingMoved[turn] &&
+          !rookMoved[turn][0]
         ) {
           return true;
         }
@@ -438,15 +443,7 @@ function App() {
       const line = typeof e.data === 'string' ? e.data : '';
       if (line.startsWith('bestmove')) {
         const move = line.split(' ')[1];
-        if (!move || move === '(none)') {
-          // Forzar comprobación de fin de partida
-          setTimeout(() => {
-            // Esto forzará el re-render y la comprobación de fin de partida en el siguiente ciclo
-            setTurn('w');
-          }, 100);
-          return;
-        }
-        if (move.length < 4) return;
+        if (!move || move.length < 4) return;
         const from = { row: 8 - parseInt(move[1]), col: move.charCodeAt(0) - 97 };
         const to = { row: 8 - parseInt(move[3]), col: move.charCodeAt(2) - 97 };
         setTimeout(() => movePieceDirectly(from, to), 200);
@@ -653,6 +650,19 @@ function App() {
       // Movimiento normal
       newBoard[row][col] = board[selected.row][selected.col];
       newBoard[selected.row][selected.col] = null;
+      // Si el rey se mueve, actualizar kingMoved
+      if (piece && piece[1] === 'k') {
+        setKingMoved(prev => ({ ...prev, [turn]: true }));
+      }
+      // Si una torre se mueve, actualizar rookMoved
+      if (piece && piece[1] === 'r') {
+        if (selected.row === (turn === 'w' ? 7 : 0) && selected.col === 0) {
+          setRookMoved(prev => ({ ...prev, [turn]: [true, prev[turn][1]] }));
+        }
+        if (selected.row === (turn === 'w' ? 7 : 0) && selected.col === 7) {
+          setRookMoved(prev => ({ ...prev, [turn]: [prev[turn][0], true] }));
+        }
+      }
       // Si peón avanza dos, habilita en passant
       if (piece && piece[1] === 'p' && Math.abs(row - selected.row) === 2) {
         setEnPassant({ row: (row + selected.row) / 2, col });
@@ -785,7 +795,7 @@ function App() {
           <GameSummary winner={winner} onRestart={handleRestart} endReason={endReason} time={timer} onClose={() => setShowSummary(false)} />
         )}
         {winner && !showStartPanel && !showSummary && (
-          <div style={{ position: 'absolute', right: 0, bottom: 0 }}>
+          <div style={{ position: 'absolute', right: -280, bottom: 0 }}>
             <button onClick={() => setShowSummary(true)} style={{ padding: '10px 32px', fontSize: 18, background: '#444', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, cursor: 'pointer', boxShadow: '0 2px 8px #0002', letterSpacing: 1 }}>
               Ver resumen de partida
             </button>
