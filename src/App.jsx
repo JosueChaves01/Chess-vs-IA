@@ -48,7 +48,7 @@ function getInitialBoard() {
   ];
 }
 
-function isValidMove(board, from, to, turn, kingMoved, rookMoved, enPassant, ignoreKingCaptureCheck = false) {
+function isValidMove(board, from, to, turn, kingMoved, rookMoved, enPassant, moveNumber = 1, ignoreKingCaptureCheck = false) {
   const piece = board[from.row][from.col];
   if (!piece) return false;
   // Prohibir capturar cualquier rey, excepto si se está evaluando amenazas (isKingInCheck)
@@ -74,7 +74,11 @@ function isValidMove(board, from, to, turn, kingMoved, rookMoved, enPassant, ign
       enPassant &&
       to.row === enPassant.row &&
       to.col === enPassant.col &&
-      Math.abs(dc) === 1 && dr === (turn === 'w' ? -1 : 1)
+      Math.abs(dc) === 1 && dr === (turn === 'w' ? -1 : 1) &&
+      // Verify it's the immediate next turn after the double pawn move
+      enPassant.moveNumber === moveNumber - 1 &&
+      // Verify the capturing pawn is on the correct rank (5th for White, 4th for Black)
+      ((turn === 'w' && from.row === 3) || (turn === 'b' && from.row === 4))
     ) {
       return true;
     }
@@ -248,14 +252,14 @@ function isCheckmate(board, turn, kingMoved, rookMoved) {
   return true;
 }
 
-function isStalemate(board, turn, kingMoved, rookMoved, enPassant) {
+function isStalemate(board, turn, kingMoved, rookMoved, enPassant, moveNumber = 1) {
   // No está en jaque y no tiene movimientos legales
   if (isKingInCheck(board, turn, kingMoved, rookMoved)) return false;
   for (let row = 0; row < 8; row++) {
     for (let col = 0; col < 8; col++) {
       const piece = board[row][col];
       if (piece && piece[0] === turn) {
-        const moves = getValidMoves(board, { row, col }, turn, kingMoved, rookMoved, enPassant);
+        const moves = getValidMoves(board, { row, col }, turn, kingMoved, rookMoved, enPassant, moveNumber);
         if (moves.length > 0) return false;
       }
     }
@@ -279,11 +283,11 @@ function isInsufficientMaterial(board) {
   return false;
 }
 
-function getValidMoves(board, from, turn, kingMoved, rookMoved, enPassant) {
+function getValidMoves(board, from, turn, kingMoved, rookMoved, enPassant, currentMoveNumber = 1) {
   const moves = [];
   for (let row = 0; row < 8; row++) {
     for (let col = 0; col < 8; col++) {
-      if (isValidMove(board, from, { row, col }, turn, kingMoved, rookMoved, enPassant)) {
+      if (isValidMove(board, from, { row, col }, turn, kingMoved, rookMoved, enPassant, currentMoveNumber)) {
         // Simula el movimiento y verifica que el rey no quede en jaque
         const newBoard = board.map(r => [...r]);
         newBoard[row][col] = board[from.row][from.col];
@@ -344,7 +348,8 @@ function App() {
   const [promotion, setPromotion] = useState(null); // {row, col, color}
   const [status, setStatus] = useState('');
   const [winner, setWinner] = useState(null);
-  const [enPassant, setEnPassant] = useState(null); // {row, col} o null
+  const [enPassant, setEnPassant] = useState(null); // {row, col, moveNumber} o null
+  const [moveNumber, setMoveNumber] = useState(1); // Track move number for en passant validation
   const [moveHistory, setMoveHistory] = useState([]); // [{from, to, piece, capture, promotion}]
   const [showStartPanel, setShowStartPanel] = useState(true);
   const [selectedColor, setSelectedColor] = useState('w');
@@ -466,6 +471,7 @@ function App() {
     setEnPassant(null);
     setWinner(null);
     setMoveHistory([]);
+    setMoveNumber(1);
     // Reiniciar Stockfish si vsAI está activo
     if (vsAI) {
       if (stockfish) {
@@ -491,6 +497,7 @@ function App() {
     setRookMoved({ w: [false, false], b: [false, false] });
     setPromotion(null);
     setEnPassant(null); // Corregido: siempre reiniciar enPassant
+    setMoveNumber(1); // Reset move number when restarting
     setMoveHistory([]); // Corregido: reiniciar historial
     setTimer(0); // Reiniciar cronómetro
     setTimerActive(false);
@@ -535,7 +542,7 @@ function App() {
         setSelected({ row, col });
         return;
       }
-      const validMoves = getValidMoves(board, selected, turn, kingMoved, rookMoved, enPassant);
+      const validMoves = getValidMoves(board, selected, turn, kingMoved, rookMoved, enPassant, moveNumber);
       const isMoveAllowed = validMoves.some(m => m.row === row && m.col === col);
       if (!isMoveAllowed) return;
       if (!timerActive && moveHistory.length === 0) {
@@ -573,7 +580,7 @@ function App() {
         // Comprobar ahogado tras enroque
         setTimeout(() => {
           const nextTurn = turn === 'w' ? 'b' : 'w';
-          if (isStalemate(newBoard, nextTurn, kingMoved, rookMoved, enPassant)) {
+          if (isStalemate(newBoard, nextTurn, kingMoved, rookMoved, enPassant, moveNumber)) {
             setWinner('draw');
             setEndReason('ahogado');
           } else if (isInsufficientMaterial(newBoard)) {
@@ -606,7 +613,7 @@ function App() {
         // Comprobar ahogado tras captura al paso
         setTimeout(() => {
           const nextTurn = turn === 'w' ? 'b' : 'w';
-          if (isStalemate(newBoard, nextTurn, kingMoved, rookMoved, enPassant) || isInsufficientMaterial(newBoard)) {
+          if (isStalemate(newBoard, nextTurn, kingMoved, rookMoved, enPassant, moveNumber) || isInsufficientMaterial(newBoard)) {
             setWinner('draw');
             setEndReason('ahogado');
           } else if (isInsufficientMaterial(newBoard)) {
@@ -625,7 +632,7 @@ function App() {
         // Comprobar ahogado tras promoción
         setTimeout(() => {
           const nextTurn = turn === 'w' ? 'b' : 'w';
-          if (isStalemate(newBoard, nextTurn, kingMoved, rookMoved, enPassant) || isInsufficientMaterial(newBoard)) {
+          if (isStalemate(newBoard, nextTurn, kingMoved, rookMoved, enPassant, moveNumber) || isInsufficientMaterial(newBoard)) {
             setWinner('draw');
             setEndReason('ahogado');
           } else if (isInsufficientMaterial(newBoard)) {
@@ -653,10 +660,17 @@ function App() {
       }
       // Si peón avanza dos, habilita en passant
       if (piece && piece[1] === 'p' && Math.abs(row - selected.row) === 2) {
-        setEnPassant({ row: (row + selected.row) / 2, col });
+        setEnPassant({ 
+          row: (row + selected.row) / 2, 
+          col,
+          moveNumber // Store the current move number when setting en passant
+        });
       } else {
         setEnPassant(null);
       }
+      
+      // Increment move number after a move is made
+      setMoveNumber(moveNumber + 1);
       setBoard(newBoard);
       setSelected(null);
       setTurn(prevTurn => {
@@ -672,7 +686,7 @@ function App() {
       // Comprobar ahogado tras movimiento normal
       setTimeout(() => {
         const nextTurn = turn === 'w' ? 'b' : 'w';
-        if (isStalemate(newBoard, nextTurn, kingMoved, rookMoved, enPassant) || isInsufficientMaterial(newBoard)) {
+        if (isStalemate(newBoard, nextTurn, kingMoved, rookMoved, enPassant, moveNumber) || isInsufficientMaterial(newBoard)) {
           setWinner('draw');
           setEndReason('ahogado');
         } else if (isInsufficientMaterial(newBoard)) {
