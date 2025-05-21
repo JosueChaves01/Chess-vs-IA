@@ -1,0 +1,45 @@
+@font-face {
+  font-family: 'Merifont';
+  src: url('../assets/Fonts/MERIFONT.TTF') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Estilos para el historial de movimientos de ajedrez */
+.move-history-container {
+  min-width: 120px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #222;
+  color: #fff;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 16px;
+  margin-top: 8px;
+  box-shadow: 0 2px 12px #0003;
+}
+.move-history-title {
+  font-weight: bold;
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+.move-history-list {
+  padding-left: 18px;
+  margin: 0;
+}
+.move-history-list li {
+  margin-bottom: 2px;
+  white-space: nowrap;
+  user-select: none;
+  font-family: 'Segoe UI Symbol', 'Noto Sans Symbols', 'Arial Unicode MS', 'DejaVu Sans', 'Symbola', 'sans-serif';
+  font-size: 1.15em;
+  letter-spacing: 0.5px;
+  line-height: 1.5;
+}
+.move-history-list li span.piece-icon {
+  font-family: 'Merifont', 'Segoe UI Symbol', 'Noto Sans Symbols', 'Arial Unicode MS', 'DejaVu Sans', 'Symbola', 'sans-serif';
+  font-size: 1.25em;
+  vertical-align: middle;
+  margin-right: 2px;
+}

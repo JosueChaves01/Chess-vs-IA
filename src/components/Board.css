@@ -1,0 +1,115 @@
+@font-face {
+  font-family: 'Merifont';
+  src: url('../src/assets/Fonts/MERIFONT.TTF') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(40px, 1fr));
+  grid-template-rows: repeat(8, minmax(40px, 1fr));
+  gap: 0;
+  border: 2px solid #333;
+  width: 90vw;
+  max-width: 600px;
+  height: 90vw;
+  max-height: 600px;
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+}
+.square {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.square.light {
+  background: #a7c796; /* verde musgo claro */
+}
+
+.square.dark {
+  background: #444444; /* gris oscuro casi negro #2e2e2e */
+}
+
+.square.light.valid-move {
+  background: #556b2f !important; /* verde un poco más oscuro */
+}
+
+.square.dark.valid-move {
+  background: #2e2e2e !important; /* gris oscuro intermedio #444444 */
+}
+
+.square.selected {
+  z-index: 2;
+  background: #c5e17a !important; /* verde lima suave para destacar selección */
+}
+
+.square.valid-move {
+  background: #91b87e !important; /* verde musgo profundo 556b2f */
+  cursor: pointer;
+}
+.square.en-passant {
+  box-shadow: 0 0 0 4px #e6b800 inset, 0 0 10px 2px #e6b80099;
+  position: relative;
+  z-index: 3;
+}
+.piece {
+  font-size: 48px;
+  font-family: 'Merifont';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+  z-index: 1;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+.piece.moving {
+  z-index: 10;
+  
+
+}
+.piece.red {
+  background: #c0392b;
+}
+.piece.white {
+  color: #fff;
+  text-shadow: 0 0 2px #000;
+}
+.piece.black {
+  color: #222;
+  text-shadow: 0 0 2px #fff;
+}
+
+.square.in-check {
+  background: #b31818;
+}
+
+@media (max-width: 600px) {
+  .board {
+    width: 100vw;
+    height: 100vw;
+    max-width: 100vw;
+    max-height: 100vw;
+    border-width: 1px;
+  }
+  .piece {
+    font-size: 10vw;
+  }
+  .square {
+    min-width: 0;
+    min-height: 0;
+    padding: 0;
+  }
+  h1 {
+    font-size: 7vw;
+    text-align: center;
+  }
+}

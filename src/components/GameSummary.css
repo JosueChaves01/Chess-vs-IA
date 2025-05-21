@@ -1,0 +1,61 @@
+.game-summary-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.game-summary-modal {
+  background: #fff;
+  color: #222;
+  padding: 2em 2.5em;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+  text-align: center;
+  min-width: 260px;
+}
+.game-summary-modal h2 {
+  margin-top: 0;
+  margin-bottom: 0.5em;
+}
+.game-summary-modal button {
+  margin-top: 1.5em;
+  padding: 0.7em 2em;
+  font-size: 1.1em;
+  border-radius: 8px;
+  border: none;
+  background: #444;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.game-summary-modal button:hover {
+  background: #222;
+}
+.close-btn {
+  position: absolute;
+  top: 0px;
+  right: 27px;
+  background: #eee;
+  border: none;
+  font-size: 24px;
+  color: #888;
+  cursor: pointer;
+  z-index: 2;
+  line-height: 1;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background 0.2s, color 0.2s;
+  aspect-ratio: 1 / 1;
+  padding: 0;
+}
+.close-btn:hover {
+  background: #ccc;
+  color: #222;
+}
