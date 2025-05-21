@@ -9,6 +9,8 @@
 /* Estilos para el historial de movimientos de ajedrez */
 .move-history-container {
   min-width: 120px;
+  max-width: 220px;
+  width: 100%;
   max-height: 90vh;
   overflow-y: auto;
   background: #222;
@@ -19,14 +21,27 @@
   margin-top: 8px;
   box-shadow: 0 2px 12px #0003;
 }
+
+@media (max-width: 700px) {
+  .move-history-container {
+    max-width: 98vw;
+    min-width: 0;
+    font-size: 14px;
+    padding: 8px;
+  }
+}
+
 .move-history-title {
   font-weight: bold;
   margin-bottom: 6px;
   letter-spacing: 0.5px;
+  text-align: center;
 }
 .move-history-list {
   padding-left: 18px;
   margin: 0;
+  max-height: 60vh;
+  overflow-y: auto;
 }
 .move-history-list li {
   margin-bottom: 2px;

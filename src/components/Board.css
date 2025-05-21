@@ -8,23 +8,44 @@
 
 .board {
   display: grid;
-  grid-template-columns: repeat(8, minmax(40px, 1fr));
-  grid-template-rows: repeat(8, minmax(40px, 1fr));
+  grid-template-columns: repeat(8, minmax(32px, 1fr));
+  grid-template-rows: repeat(8, minmax(32px, 1fr));
   gap: 0;
   border: 2px solid #333;
-  width: 90vw;
+  width: 100vw;
   max-width: 600px;
-  height: 90vw;
+  height: 100vw;
   max-height: 600px;
   aspect-ratio: 1 / 1;
-  margin: 0 auto;
+  margin: 32px auto 0 auto; /* Deja espacio superior para el header fijo */
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
 }
+
+@media (max-width: 700px) {
+  .board {
+    max-width: 98vw;
+    max-height: 98vw;
+    min-width: 240px;
+    min-height: 240px;
+    margin-top: 24px;
+  }
+}
+
+@media (max-width: 400px) {
+  .board {
+    min-width: 180px;
+    min-height: 180px;
+  }
+}
+
 .square {
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: clamp(1.2rem, 4vw, 2.2rem);
+  user-select: none;
 }
 .square.light {
   background: #a7c796; /* verde musgo claro */
@@ -90,26 +111,4 @@
 
 .square.in-check {
   background: #b31818;
-}
-
-@media (max-width: 600px) {
-  .board {
-    width: 100vw;
-    height: 100vw;
-    max-width: 100vw;
-    max-height: 100vw;
-    border-width: 1px;
-  }
-  .piece {
-    font-size: 10vw;
-  }
-  .square {
-    min-width: 0;
-    min-height: 0;
-    padding: 0;
-  }
-  h1 {
-    font-size: 7vw;
-    text-align: center;
-  }
 }

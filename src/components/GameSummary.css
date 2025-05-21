@@ -15,6 +15,7 @@
   box-shadow: 0 4px 24px rgba(0,0,0,0.2);
   text-align: center;
   min-width: 260px;
+  max-width: 95vw;
 }
 .game-summary-modal h2 {
   margin-top: 0;
@@ -58,4 +59,13 @@
 .close-btn:hover {
   background: #ccc;
   color: #222;
+}
+
+@media (max-width: 600px) {
+  .game-summary-modal {
+    padding: 1em 0.5em;
+    min-width: 0;
+    width: 98vw;
+    font-size: 0.98em;
+  }
 }

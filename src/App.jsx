@@ -6,6 +6,7 @@ import Board from './components/Board';
 import GameSummary from './components/GameSummary';
 import MoveHistory from './components/MoveHistory';
 import GameStartPanel from './components/GameStartPanel';
+import Header from './components/Header';
 
 const pieceSymbols = {
   'wp': 'o', 'wr': 't', 'wn': 'm', 'wb': 'v', 'wq': 'w', 'wk': 'l',
@@ -513,22 +514,9 @@ function App() {
   function handleSurrender() {
     setSurrendered(true);
     setEndReason('rendicion');
-    setTimeout(() => {
-      setShowStartPanel(true);
-      setSurrendered(false);
-      setTimer(0);
-      setTimerActive(false);
-      setTurn(selectedColor);
-      setBoard(getInitialBoard());
-      setSelected(null);
-      setKingMoved({ w: false, b: false });
-      setRookMoved({ w: [false, false], b: [false, false] });
-      setPromotion(null);
-      setEnPassant(null);
-      setWinner(null);
-      setMoveHistory([]);
-      setEndReason(null);
-    }, 1800);
+    setWinner(turn === 'w' ? 'b' : 'w'); // Marca como ganador al oponente
+    setShowSummary(true); // Muestra el resumen de partida inmediatamente
+    setTimerActive(false);
   }
 
   function isOwnPiece(piece) {
@@ -716,109 +704,82 @@ function App() {
   const capturedBlack = getCapturedPieces(board, 'w');
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start', gap: 24 }}>
-      {/* Historial de movimientos */}
-      <MoveHistory moveHistory={moveHistory} />
-      {/* Tablero y capturadas */}
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
-        {/* Cronómetro */}
-        <div className="move-history-container" style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          zIndex: 10,
-          minWidth: 'unset',
-          maxWidth: 180,
-          padding: '10px 18px',
-          fontSize: 22,
-          fontWeight: 600,
-          color: '#fff',
-          background: undefined,
-          borderRadius: 8,
-          textAlign: 'left',
-          boxShadow: '0 2px 12px #0003',
-          display: 'inline-block',
-          whiteSpace: 'nowrap',
-        }}>
-          <span style={{ fontVariantNumeric: 'tabular-nums', letterSpacing: 1 }}>{Math.floor(timer / 60).toString().padStart(2, '0')}:{(timer % 60).toString().padStart(2, '0')}</span>
-        </div>
-        <h1>Juego de Ajedrez</h1>
-        {/* Botón de rendirse */}
-        {!winner && !showStartPanel && !surrendered && (
-          <div style={{ position: 'absolute', right: -130, bottom: 0, margin: 0 }}>
-            <button onClick={handleSurrender} style={{ padding: '10px 32px', fontSize: 18, background: '#1ca000', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, cursor: 'pointer', boxShadow: '0 2px 8px #0002', letterSpacing: 1 }}>
-              Rendirse
-            </button>
+    <div className="App">
+      <Header onSurrender={handleSurrender} timer={timer} />
+      <div className="app-content">
+        <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start', gap: 24, width: '100%', height: '100%' }}>
+          {/* Historial de movimientos */}
+          <div style={{ marginTop: 32 }}>
+            <MoveHistory moveHistory={moveHistory} />
           </div>
-        )}
-        {/* Mensaje de derrota */}
-        {surrendered && (
-          <div style={{ background: '#fff', color: '#a00', fontWeight: 700, fontSize: 22, padding: '18px 32px', borderRadius: 10, marginBottom: 16, boxShadow: '0 2px 12px #0003' }}>
-            ¡Te has rendido! Has perdido la partida.
-          </div>
-        )}
-        <div style={{ width: 'min(98vw, 700px)', height: 'min(98vw, 700px)' }}>
-          <Board 
-            board={board} 
-            onSquareClick={handleSquareClick}   
-            selected={selected} 
-            validMoves={validMoves}
-            turn={turn}
-            isKingInCheck={(b, t) => isKingInCheck(b, t, kingMoved, rookMoved)}
-          />
-        </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '16px 0 0 0', minHeight: capturedWhite.length > 8 || capturedBlack.length > 8 ? 84 : 56, width: '87%' }}>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, maxWidth: 300 }}>
-            {capturedWhite.map((p, i) => (
-              <span key={i} style={{ fontSize: 28, fontFamily: 'Merifont', color: '#222', textShadow: '0 0 2px #fff', userSelect: 'none' }}>{pieceSymbols[p]}</span>
-            ))}
-          </div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, maxWidth: 300, justifyContent: 'flex-end' }}>
-            {capturedBlack.map((p, i) => (
-              <span key={i} style={{ fontSize: 28, fontFamily: 'Merifont', color: '#fff', textShadow: '0 0 2px #000', userSelect: 'none' }}>{pieceSymbols[p]}</span>
-            ))}
-          </div>
-        </div>
-        {promotion && (
-          <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}>
-            <div style={{ background: '#fff', padding: 24, borderRadius: 8, display: 'flex', gap: 16, fontFamily: 'Merifont', fontSize: 32, fontWeight: 700, color: '#222', textShadow: '0 0 2px #fff', userSelect: 'none' }}>
-              {['q','r','b','n'].map(type => (
-                <button key={type} style={{ fontSize: 32, padding: 12 }} onClick={() => handlePromotion(type)}>
-                  {pieceSymbols[promotion.color + type]}
-                </button>
-              ))}
+          {/* Tablero y capturadas */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative', marginTop: 32 }}>
+            <div style={{ width: 'min(98vw, 700px)', height: 'min(98vw, 700px)' }}>
+              <Board 
+                board={board} 
+                onSquareClick={handleSquareClick}   
+                selected={selected} 
+                validMoves={validMoves}
+                turn={turn}
+                isKingInCheck={(b, t) => isKingInCheck(b, t, kingMoved, rookMoved)}
+              />
             </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '16px 0 0 0', minHeight: capturedWhite.length > 8 || capturedBlack.length > 8 ? 84 : 56, width: '87%' }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, maxWidth: 300 }}>
+                {capturedWhite.map((p, i) => (
+                  <span key={i} style={{ fontSize: 28, fontFamily: 'Merifont', color: '#222', textShadow: '0 0 2px #fff', userSelect: 'none' }}>{pieceSymbols[p]}</span>
+                ))}
+              </div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, maxWidth: 300, justifyContent: 'flex-end' }}>
+                {capturedBlack.map((p, i) => (
+                  <span key={i} style={{ fontSize: 28, fontFamily: 'Merifont', color: '#fff', textShadow: '0 0 2px #000', userSelect: 'none' }}>{pieceSymbols[p]}</span>
+                ))}
+              </div>
+            </div>
+            {promotion && (
+              <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}>
+                <div style={{ background: '#fff', padding: 24, borderRadius: 8, display: 'flex', gap: 16, fontFamily: 'Merifont', fontSize: 32, fontWeight: 700, color: '#222', textShadow: '0 0 2px #fff', userSelect: 'none' }}>
+                  {['q','r','b','n'].map(type => (
+                    <button key={type} style={{ fontSize: 32, padding: 12 }} onClick={() => handlePromotion(type)}>
+                      {pieceSymbols[promotion.color + type]}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+            {/* GameSummary y botón para mostrarlo */}
+            {winner && !showStartPanel && showSummary && (
+              <GameSummary winner={winner} onRestart={handleRestart} endReason={endReason} time={timer} onClose={() => setShowSummary(false)} />
+            )}
+            {winner && !showStartPanel && !showSummary && (
+              <div style={{ position: 'absolute', right: -280, bottom: 0 }}>
+                <button onClick={() => setShowSummary(true)} style={{ padding: '10px 32px', fontSize: 18, background: '#444', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, cursor: 'pointer', boxShadow: '0 2px 8px #0002', letterSpacing: 1 }}>
+                  Ver resumen de partida
+                </button>
+              </div>
+            )}
+            {showStartPanel && (
+              <GameStartPanel
+                onStart={handleStartGame}
+                vsAI={vsAI}
+                setVsAI={setVsAI}
+              />
+            )}
+            {/* Mensaje de empate solo si no está el panel de inicio */}
+            {winner === 'draw' && !showStartPanel && showSummary && (
+              <GameSummary winner={null} isDraw={true} onRestart={handleRestart} endReason={endReason} time={timer} onClose={() => setShowSummary(false)} />
+            )}
+            {winner === 'draw' && !showStartPanel && !showSummary && (
+              <div style={{ position: 'absolute', right: 0, bottom: 0 }}>
+                <button onClick={() => setShowSummary(true)} style={{ padding: '10px 32px', fontSize: 18, background: '#444', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, cursor: 'pointer', boxShadow: '0 2px 8px #0002', letterSpacing: 1 }}>
+                  Ver resumen de partida
+                </button>
+              </div>
+            )}
           </div>
-        )}
-        {/* GameSummary y botón para mostrarlo */}
-        {winner && !showStartPanel && showSummary && (
-          <GameSummary winner={winner} onRestart={handleRestart} endReason={endReason} time={timer} onClose={() => setShowSummary(false)} />
-        )}
-        {winner && !showStartPanel && !showSummary && (
-          <div style={{ position: 'absolute', right: -280, bottom: 0 }}>
-            <button onClick={() => setShowSummary(true)} style={{ padding: '10px 32px', fontSize: 18, background: '#444', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, cursor: 'pointer', boxShadow: '0 2px 8px #0002', letterSpacing: 1 }}>
-              Ver resumen de partida
-            </button>
-          </div>
-        )}
-        {showStartPanel && (
-          <GameStartPanel
-            onStart={handleStartGame}
-            vsAI={vsAI}
-            setVsAI={setVsAI}
-          />
-        )}
-        {/* Mensaje de empate solo si no está el panel de inicio */}
-        {winner === 'draw' && !showStartPanel && showSummary && (
-          <GameSummary winner={null} isDraw={true} onRestart={handleRestart} endReason={endReason} time={timer} onClose={() => setShowSummary(false)} />
-        )}
-        {winner === 'draw' && !showStartPanel && !showSummary && (
-          <div style={{ position: 'absolute', right: 0, bottom: 0 }}>
-            <button onClick={() => setShowSummary(true)} style={{ padding: '10px 32px', fontSize: 18, background: '#444', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, cursor: 'pointer', boxShadow: '0 2px 8px #0002', letterSpacing: 1 }}>
-              Ver resumen de partida
-            </button>
-          </div>
-        )}
+          {/* Div fantasma para centrar el tablero */}
+          <div style={{ width: 220, minWidth: 120, maxWidth: 220, height: '1px', visibility: 'hidden' }} aria-hidden="true"></div>
+        </div>
       </div>
     </div>
   );
@@ -826,16 +787,3 @@ function App() {
 
 export default App
 
-// Ejemplo de tablero para probar tablas por material insuficiente:
-// Puedes usar esto en setBoard para probar:
-// [
-//   [null, null, null, null, null, null, null, 'bk'],
-//   [null, null, null, null, null, null, null, null],
-//   [null, null, null, null, null, null, null, null],
-//   [null, null, null, null, null, null, null, null],
-//   [null, null, null, null, null, null, null, null],
-//   [null, null, null, null, null, null, null, null],
-//   [null, null, null, null, null, null, null, null],
-//   [null, null, null, null, null, null, null, 'wk'],
-// ]
-// Al mover cualquier rey, debe marcar tablas automáticamente.
