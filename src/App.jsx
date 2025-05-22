@@ -213,22 +213,39 @@ function isKingInCheck(board, turn, kingMoved, rookMoved) {
     if (kingPos) break;
   }
   if (!kingPos) return false;
+  
   // ¿Alguna pieza enemiga puede capturar al rey?
   const enemy = turn === 'w' ? 'b' : 'w';
+  
   for (let row = 0; row < 8; row++) {
     for (let col = 0; col < 8; col++) {
       const piece = board[row][col];
       if (piece && piece[0] === enemy) {
-        // Evitar recursión infinita para peones
-        if (piece[1] === 'p') {
+        const type = piece[1];
+        
+        // Manejo específico para peones
+        if (type === 'p') {
           const dir = enemy === 'w' ? -1 : 1;
+          // Un peón ataca en diagonal
           if (
-            kingPos.row === row + dir &&
-            (kingPos.col === col + 1 || kingPos.col === col - 1)
+            row + dir === kingPos.row && 
+            (col + 1 === kingPos.col || col - 1 === kingPos.col)
           ) {
             return true;
           }
-        } else if (isValidMove(board, { row, col }, kingPos, enemy, kingMoved, rookMoved, undefined, true)) {
+        } 
+        // Para todas las demás piezas, utilizar isValidMove con ignoreKingCaptureCheck=true
+        else if (isValidMove(
+          board, 
+          { row, col }, 
+          kingPos, 
+          enemy, 
+          kingMoved, 
+          rookMoved, 
+          undefined, // enPassant no es relevante para comprobar jaque
+          1,         // moveNumber (no relevante para comprobar jaque)
+          true       // ignoreKingCaptureCheck - crucial para permitir evaluar ataques al rey
+        )) {
           return true;
         }
       }
