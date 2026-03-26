@@ -1,8 +1,7 @@
 .container {
-  min-width: 200px;
-  max-width: 220px;
   width: 100%;
-  max-height: 90vh;
+  min-width: 0;
+  max-height: calc(100vh - 100px);
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -21,7 +20,7 @@
 
 .title {
   font-family: 'Cinzel', serif;
-  font-size: 12px;
+  font-size: 15px;
   font-weight: 700;
   letter-spacing: 0.18em;
   color: var(--gold);
@@ -45,7 +44,7 @@
 
 .pairRow {
   display: grid;
-  grid-template-columns: 22px 1fr 1fr;
+  grid-template-columns: 30px 1fr 1fr;
   border-bottom: 1px solid rgba(58, 48, 40, 0.45);
   transition: background 0.12s;
 }
@@ -58,9 +57,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 5px 2px;
+  padding: 9px 4px;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
+  font-size: 13px;
   color: var(--gold);
   font-weight: 700;
   background: var(--bg-surface);
@@ -69,9 +68,9 @@
 }
 
 .moveCell {
-  padding: 5px 5px;
+  padding: 9px 10px;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
+  font-size: 13px;
   color: var(--text-muted);
   white-space: nowrap;
   overflow: hidden;
@@ -95,7 +94,7 @@
 
 .pieceIcon {
   font-family: 'Merifont', serif;
-  font-size: 13px;
+  font-size: 18px;
   line-height: 1;
   flex-shrink: 0;
   color: var(--text-secondary);
@@ -108,7 +107,7 @@
 .capture {
   color: #d06060;
   font-weight: 700;
-  font-size: 11px;
+  font-size: 13px;
 }
 
 .empty {
@@ -134,5 +133,9 @@
 }
 
 @media (max-width: 700px) {
-  .container { max-width: 98vw; min-width: 0; }
+  .container {
+    max-width: 98vw;
+    min-width: 0;
+    max-height: max(160px, calc(100vh - 490px));
+  }
 }
