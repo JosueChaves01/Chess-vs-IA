@@ -1,0 +1,125 @@
+.appContent {
+  margin-top: 60px;
+  min-height: calc(100vh - 60px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 8px;
+}
+
+.mainRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 20px;
+  width: 100%;
+  height: 100%;
+}
+
+.historyCol {
+  margin-top: 24px;
+  position: sticky;
+  top: 80px;
+}
+
+.boardCol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  margin-top: 24px;
+}
+
+.boardWrapper {
+  width: min(96vw, 620px);
+  height: min(96vw, 620px);
+}
+
+.ghostCol {
+  width: 220px;
+  min-width: 120px;
+  max-width: 220px;
+  height: 1px;
+  visibility: hidden;
+  flex-shrink: 0;
+}
+
+.summaryBtnWrap {
+  margin-top: 14px;
+}
+
+.summaryBtnWrap button {
+  padding: 10px 28px;
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: linear-gradient(120deg, #c9a227, #e8c060);
+  color: #1a1200;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(201, 162, 39, 0.32);
+  transition: transform 0.14s, box-shadow 0.2s;
+}
+
+.summaryBtnWrap button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(201, 162, 39, 0.55);
+}
+
+.stockfishError {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--bg-card);
+  border: 2px solid #c44;
+  border-radius: var(--radius);
+  padding: 24px;
+  z-index: 200;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+
+.stockfishError p {
+  color: #e06060;
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  margin-bottom: 14px;
+}
+
+.stockfishError button {
+  padding: 8px 22px;
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-gold);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+
+.stockfishError button:hover {
+  background: var(--gold-glow);
+}
+
+@media (max-width: 900px) {
+  .mainRow { gap: 10px; }
+  .ghostCol { display: none; }
+}
+
+@media (max-width: 700px) {
+  .mainRow { flex-direction: column; align-items: center; }
+  .historyCol { margin-top: 10px; position: static; }
+  .boardWrapper { width: min(96vw, 480px); height: min(96vw, 480px); }
+}

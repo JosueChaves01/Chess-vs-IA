@@ -1,69 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+@font-face {
+  font-family: 'Merifont';
+  src: url('./assets/Fonts/MERIFONT.TTF') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --bg-primary:    #141210;
+  --bg-secondary:  #1c1814;
+  --bg-surface:    #231f1a;
+  --bg-card:       #2a2420;
+  --bg-card-hover: #332d27;
+
+  --gold:       #c9a227;
+  --gold-light: #e8c060;
+  --gold-dim:   rgba(201, 162, 39, 0.4);
+  --gold-glow:  rgba(201, 162, 39, 0.1);
+
+  --board-light:          #f0d9b5;
+  --board-dark:           #b58863;
+  --board-selected-light: #f6f669;
+  --board-selected-dark:  #baca2b;
+  --board-last-light:     #cdd26f;
+  --board-last-dark:      #aaa23a;
+  --board-check:          #c8120a;
+  --board-border:         #4a3728;
+
+  --text-primary:   #f0e0c0;
+  --text-secondary: #a89070;
+  --text-muted:     #6b5840;
+
+  --border:      #3a3028;
+  --border-gold: rgba(201, 162, 39, 0.3);
+
+  --radius:    8px;
+  --shadow:    0 8px 32px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.75);
+
+  font-family: 'Cinzel', 'Palatino Linotype', Palatino, serif;
   line-height: 1.5;
   font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
+  color-scheme: dark;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
+*, *::before, *::after { box-sizing: border-box; }
 
 body {
   margin: 0;
-  display: block; /* Cambiado de flex a block para evitar que el body fuerce el ancho */
-  min-width: 0; /* Evita que el body fuerce un ancho mínimo */
   min-height: 100vh;
   width: 100vw;
-  overflow-x: hidden; /* Oculta cualquier desbordamiento horizontal */
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+  overflow-x: hidden;
+  background: var(--bg-primary);
 }
 
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+  font-family: 'Cinzel', 'Palatino Linotype', serif;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
 }

@@ -1,14 +1,12 @@
 import React, { useRef, useEffect, useState } from 'react';
 import './Board.css';
+import { PIECE_SYMBOLS } from '../utils/chessUtils';
 
 const BOARD_SIZE = 8;
 
 function renderPiece(piece, isMoving, style) {
   if (!piece) return null;
-  const pieceSymbols = {
-    'wp': 'o', 'wr': 't', 'wn': 'm', 'wb': 'v', 'wq': 'w', 'wk': 'l',
-    'bp': 'o', 'br': 't', 'bn': 'm', 'bb': 'v', 'bq': 'w', 'bk': 'l',
-  };
+  const pieceSymbols = PIECE_SYMBOLS;
   // Si está en animación, combina el transform de desplazamiento con un pequeño escalado
   let finalStyle = style || {};
   if (isMoving && style && style.transform) {

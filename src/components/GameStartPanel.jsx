@@ -1,7 +1,7 @@
 import React from 'react';
 import './GameSummary.css';
 
-export default function GameStartPanel({ onStart, vsAI, setVsAI }) {
+export default function GameStartPanel({ onStart, vsAI, setVsAI, aiDifficulty, setAiDifficulty }) {
   return (
     <div className="game-summary-overlay">
       <div className="game-summary-modal" style={{ position: 'relative', minWidth: 300 }}>
@@ -29,6 +29,41 @@ export default function GameStartPanel({ onStart, vsAI, setVsAI }) {
             2 jugadores
           </label>
         </div>
+        {vsAI && (
+          <div style={{ margin: '0 0 12px 0' }}>
+            <label style={{ fontWeight: 500, marginRight: 12 }}>Dificultad:</label>
+            <label style={{ marginRight: 12 }}>
+              <input
+                type="radio"
+                name="aiDifficulty"
+                value="easy"
+                checked={aiDifficulty === 'easy'}
+                onChange={() => setAiDifficulty('easy')}
+              />
+              Fácil
+            </label>
+            <label style={{ marginRight: 12 }}>
+              <input
+                type="radio"
+                name="aiDifficulty"
+                value="medium"
+                checked={aiDifficulty === 'medium'}
+                onChange={() => setAiDifficulty('medium')}
+              />
+              Media
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="aiDifficulty"
+                value="hard"
+                checked={aiDifficulty === 'hard'}
+                onChange={() => setAiDifficulty('hard')}
+              />
+              Difícil
+            </label>
+          </div>
+        )}
         <button onClick={onStart} style={{ marginTop: 18, fontSize: 18, padding: '10px 32px' }}>Comenzar</button>
       </div>
     </div>

@@ -1,0 +1,12 @@
+export const selectShowStartPanel = state => state.ui.showStartPanel;
+export const selectShowSummary = state => state.ui.showSummary;
+export const selectAnimateMoveFrom = state => state.ui.animateMoveFrom;
+export const selectAnimateMoveTo = state => state.ui.animateMoveTo;
+export const selectAnimateMovePiece = state => state.ui.animateMovePiece;
+export const selectTimer = state => state.ui.timer;
+export const selectTimerActive = state => state.ui.timerActive;
+export const selectBoardFlipped = state => state.ui.boardFlipped;
+export const selectVsAI = state => state.ai.vsAI;
+export const selectAiDifficulty = state => state.ai.aiDifficulty;
+export const selectStockfishError = state => state.ai.stockfishError;
+export const selectIsAiThinking = state => state.ai.isAiThinking;

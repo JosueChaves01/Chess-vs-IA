@@ -1,10 +1,6 @@
 import React from 'react';
 import './MoveHistory.css';
-
-const pieceSymbols = {
-  'wp': 'o', 'wr': 't', 'wn': 'm', 'wb': 'v', 'wq': 'w', 'wk': 'l',
-  'bp': 'o', 'br': 't', 'bn': 'm', 'bb': 'v', 'bq': 'w', 'bk': 'l',
-};
+import { PIECE_SYMBOLS as pieceSymbols } from '../utils/chessUtils';
 
 export default function MoveHistory({ moveHistory }) {
   return (
@@ -18,7 +14,7 @@ export default function MoveHistory({ moveHistory }) {
             {' → '}
             {String.fromCharCode(97 + m.to.col)}{8 - m.to.row}
             {m.capture ? ' ×' : ''}
-            {m.promotion ? ' =Q' : ''}
+            {m.promotion ? ` =${m.promotion.toUpperCase()}` : ''}
           </li>
         ))}
       </ol>

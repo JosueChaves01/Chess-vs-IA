@@ -52,7 +52,6 @@ Abre [http://localhost:5173](http://localhost:5173) en tu navegador.
 
 
 ## Créditos
-- Interfaz y lógica: [Tu nombre]
 - Motor de ajedrez: [Stockfish](https://stockfishchess.org/)
 
 ---

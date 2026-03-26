@@ -1,0 +1,266 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 6, 4, 0.94);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border-gold);
+  border-radius: 18px;
+  padding: 2.5rem 2.5rem 2.25rem;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: var(--shadow-lg), 0 0 0 1px rgba(0,0,0,0.5);
+  animation: slideUp 0.38s cubic-bezier(0.34, 1.56, 0.64, 1);
+  text-align: center;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(28px) scale(0.95); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.hero {
+  font-family: 'Merifont', serif;
+  font-size: 60px;
+  line-height: 1;
+  color: var(--gold);
+  margin-bottom: 10px;
+  filter: drop-shadow(0 0 24px rgba(201, 162, 39, 0.35));
+}
+
+.title {
+  font-family: 'Cinzel', serif;
+  font-size: 1.7rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  color: var(--text-primary);
+  margin: 0 0 5px;
+}
+
+.subtitle {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin: 0 0 1.75rem;
+  opacity: 0.75;
+}
+
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-gold), transparent);
+  margin: 0 0 1.5rem;
+}
+
+.sectionLabel {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+/* ─── Mode Cards ─── */
+.modeGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 1.5rem;
+}
+
+.modeCard {
+  background: var(--bg-surface);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 10px 14px;
+  cursor: pointer;
+  transition: border-color 0.18s, background 0.18s, transform 0.14s;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  outline: none;
+}
+
+.modeCard:hover {
+  border-color: var(--gold-dim);
+  background: var(--bg-card-hover);
+  transform: translateY(-2px);
+}
+
+.modeCard:focus-visible {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 2px var(--gold-dim);
+}
+
+.modeCard.active {
+  border-color: var(--gold);
+  background: rgba(201, 162, 39, 0.08);
+}
+
+.modeIcon {
+  font-family: 'Merifont', serif;
+  font-size: 30px;
+  line-height: 1;
+  color: var(--text-muted);
+  transition: color 0.18s;
+}
+
+.modeCard.active .modeIcon,
+.modeCard:hover .modeIcon {
+  color: var(--gold);
+}
+
+.modeLabel {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+  font-weight: 600;
+  text-transform: uppercase;
+  line-height: 1.4;
+  transition: color 0.18s;
+}
+
+.modeCard.active .modeLabel {
+  color: var(--text-primary);
+}
+
+/* ─── Difficulty Cards ─── */
+.diffGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 1.5rem;
+  animation: fadeInUp 0.22s ease;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.diffCard {
+  background: var(--bg-surface);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  padding: 13px 6px 11px;
+  cursor: pointer;
+  transition: border-color 0.18s, background 0.18s, transform 0.14s;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  outline: none;
+}
+
+.diffCard:hover {
+  border-color: var(--gold-dim);
+  background: var(--bg-card-hover);
+  transform: translateY(-2px);
+}
+
+.diffCard:focus-visible {
+  border-color: var(--gold);
+}
+
+.diffCard.active {
+  border-color: var(--gold);
+  background: rgba(201, 162, 39, 0.08);
+}
+
+.diffIcon {
+  font-family: 'Merifont', serif;
+  font-size: 24px;
+  line-height: 1;
+  color: var(--text-muted);
+  transition: color 0.18s;
+}
+
+.diffCard.active .diffIcon,
+.diffCard:hover .diffIcon {
+  color: var(--gold);
+}
+
+.diffName {
+  font-family: 'Cinzel', serif;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: var(--text-secondary);
+  font-weight: 700;
+  text-transform: uppercase;
+  transition: color 0.18s;
+}
+
+.diffCard.active .diffName {
+  color: var(--text-primary);
+}
+
+.diffElo {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8.5px;
+  color: var(--gold);
+  opacity: 0.6;
+  letter-spacing: 0.05em;
+  transition: opacity 0.18s;
+}
+
+.diffCard.active .diffElo,
+.diffCard:hover .diffElo {
+  opacity: 1;
+}
+
+/* ─── Start Button ─── */
+.startBtn {
+  width: 100%;
+  padding: 14px;
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  background: linear-gradient(120deg, #c9a227 0%, #e8c060 50%, #c9a227 100%);
+  background-size: 200%;
+  background-position: 0%;
+  color: #1a1200;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-position 0.45s ease, transform 0.14s, box-shadow 0.2s;
+  box-shadow: 0 4px 22px rgba(201, 162, 39, 0.32);
+}
+
+.startBtn:hover {
+  background-position: 100%;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(201, 162, 39, 0.55);
+}
+
+.startBtn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 12px rgba(201, 162, 39, 0.3);
+}
+
+@media (max-width: 600px) {
+  .modal { padding: 1.75rem 1.25rem 1.5rem; border-radius: 14px; }
+  .title { font-size: 1.35rem; }
+  .hero  { font-size: 46px; }
+}
